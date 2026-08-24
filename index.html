@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bóklegt ökupróf trainer</title>
+  <style>html,body{margin:0;height:100%;background:#17191D;color:#EDEDEA;font-family:Arial,sans-serif}.loading{height:100%;display:grid;place-items:center;text-align:center;padding:24px;box-sizing:border-box}.loading b{color:#F5C400}</style>
+</head>
+<body><div class="loading" id="loading"><div><b>Loading driving theory trainer…</b><br><small>Preparing the full practice app.</small></div></div>
+<script>
+(async()=>{
+  try{
+    if(!('DecompressionStream' in window)) throw new Error('This browser is too old to open the trainer. Please use a current Chrome, Edge, Firefox or Safari.');
+    const response=await fetch('./trainer.html.gz',{cache:'no-store'});
+    if(!response.ok) throw new Error('Could not load the trainer data ('+response.status+').');
+    const stream=response.body.pipeThrough(new DecompressionStream('gzip'));
+    const html=await new Response(stream).text();
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.getElementById('loading').innerHTML='<div><b>Could not load the trainer.</b><br><small>'+String(err.message||err)+'</small></div>';
+  }
+})();
+</script>
+</body>
+</html>
